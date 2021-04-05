@@ -2,9 +2,9 @@
 from PIL import Image
 import os, sys
 
-path="/home/james/findingfauna_data/whale/orca/"
+path="/home/james/findingfauna_data_732/JPEGImages/"
 dirs = os.listdir( path )
-final_size = 244
+final_size = 732
 
 def resize_aspect_fit():
     for item in dirs:
@@ -19,6 +19,6 @@ def resize_aspect_fit():
             im = im.resize(new_image_size, Image.ANTIALIAS)
             new_im = Image.new("RGB", (final_size, final_size))
             new_im.paste(im, ((final_size-new_image_size[0])//2, (final_size-new_image_size[1])//2))
-            new_im.save(f + 'resized.jpg', 'JPEG', quality=90)
+            new_im.save(f + '.jpg', 'JPEG', quality=90)
 
 resize_aspect_fit()

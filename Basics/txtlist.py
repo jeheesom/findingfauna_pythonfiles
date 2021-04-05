@@ -1,7 +1,7 @@
 import os
 
-outputfile = "/home/james/jetson-inference/python/training/detection/ssd/data/smallpenguin/inventory.txt"
-folder ="/home/james/jetson-inference/python/training/detection/ssd/data/smallpenguin/JPEGImages"
+outputfile = "/home/james/findingfauna_data/whale_ordered/pascal/ImageSets/Main/val.txt"
+folder ="/home/james/findingfauna_data/whale_ordered/val10/"
 exclude =['.tmp']
 pathsep ="/"
 
