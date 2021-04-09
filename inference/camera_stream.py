@@ -17,6 +17,7 @@ except:
 	sys.exit(0)
 
 # create video sources & outputs
+print(jetson.utils.videoSource.Usage())
 input = jetson.utils.videoSource(opt.input_URI, argv=sys.argv)
 output = jetson.utils.videoOutput(opt.output_URI, argv=sys.argv)
 

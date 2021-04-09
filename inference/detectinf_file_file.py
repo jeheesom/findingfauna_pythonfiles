@@ -13,9 +13,9 @@ j=0
 # while os.path.exists(f"/home/james/processed_input/processed_images/anomaly_{i}.jpg"):
 # 	i += 1
 
-image_in = "/home/james/test_input/"
-#image_in = "/home/james/findingfauna_data_732/class_hump_blue/class_hump_blue_ttv/train/bluewhale/"
-image_out = (f"/home/james/processed_input/processed_images/anomaly_{i}.jpg")
+#image_in = "/home/james/test_input/"
+image_in = "/home/james/camera_in/"
+image_out = (f"/home/james/processed_input/detected_images/anomaly_{i}.jpg")
 #image_out = "/home/james/processed_input/processed_images/anomaly_%i.jpg"
 #detect_data_out = "/home/james/processed_input/anomaly_%i.csv"
 model_path = "ssd-mobilenet-v2"
@@ -29,7 +29,7 @@ parser = argparse.ArgumentParser(description="Locate objects in a live camera st
 parser.add_argument("input_URI", type=str, default=image_in, nargs='?', help="URI of the input stream")
 parser.add_argument("output_URI", type=str, default=image_out, nargs='?', help="URI of the output stream")
 parser.add_argument("--network", type=str, default=model_path, help="pre-trained model to load (see below for options)")
-parser.add_argument("--overlay", type=str, default="none", help="detection overlay flags (e.g. --overlay=box,labels,conf)\nvalid combinations are:  'box', 'labels', 'conf', 'none'")
+parser.add_argument("--overlay", type=str, default="box,labels", help="detection overlay flags (e.g. --overlay=box,labels,conf)\nvalid combinations are:  'box', 'labels', 'conf', 'none'")
 parser.add_argument("--threshold", type=float, default=0.5, help="minimum detection threshold to use") 
 
 
@@ -41,8 +41,8 @@ except:
 	sys.exit(0)
 
 # load the object detection network
-net = jetson.inference.detectNet(opt.network, sys.argv, opt.threshold)
-#net = jetson.inference.detectNet(argv=['--model=/home/james/jetson-inference/python/training/detection/ssd/models/whale_openimages/1/ssd-mobilenet.onnx', '--labels=/home/james/jetson-inference/python/training/detection/ssd/models/whale_openimages/1/labels.txt', '--input-blob=input_0', '--output-cvg=scores', '--output-bbox=boxes', '--threshold=0.7'])
+#net = jetson.inference.detectNet(opt.network, sys.argv, opt.threshold)
+net = jetson.inference.detectNet(argv=['--model=/home/james/jetson-inference/python/training/detection/ssd/models/whale_openimages/1/ssd-mobilenet.onnx', '--labels=/home/james/jetson-inference/python/training/detection/ssd/models/whale_openimages/1/labels.txt', '--input-blob=input_0', '--output-cvg=scores', '--output-bbox=boxes', '--threshold=0.26'])
 
 # create video sources & outputs
 input = jetson.utils.videoSource(opt.input_URI, argv=sys.argv)
@@ -54,10 +54,10 @@ while True:
 	file_count = len(files)
 	#print("file count is ", file_count)
 	while True:
-		while os.path.exists(f"/home/james/processed_input/processed_images/anomaly_{i}.jpg"):
+		while os.path.exists(f"/home/james/processed_input/detected_images/anomaly_{i}.jpg"):
 			i += 1
 		
-		image_out = (f"/home/james/processed_input/processed_images/anomaly_{i}.jpg")
+		image_out = (f"/home/james/processed_input/detected_images/anomaly_{i}.jpg")
 		output_URI = (image_out)
 		print(jetson.utils.videoOutput.Usage())
 		output = jetson.utils.videoOutput(output_URI, argv=sys.argv)
@@ -66,7 +66,7 @@ while True:
 		detections = net.Detect(img, overlay=opt.overlay)
 		my_Biglist = [my_Header]
 		for detection in detections:
-
+			print(detection)
 			my_ClassID = detection.ClassID
 			my_Confidence = "%.2f" % detection.Confidence
 			my_Left = "%.2f" % detection.Left
@@ -80,11 +80,11 @@ while True:
 
 		if len(detections) >= 1:
 
-			#output.Render(img)
-			while os.path.exists(f"/home/james/processed_input/anomaly_{i}.csv"):
+			output.Render(img)
+			while os.path.exists(f"/home/james/processed_input/csv_files/anomaly_{i}.csv"):
 				i += 1
 
-			with open(f"/home/james/processed_input/anomaly_{i}.csv", 'w', newline='') as new_file:
+			with open(f"/home/james/processed_input/csv_files/anomaly_{i}.csv", 'w', newline='') as new_file:
 		 		csv_writer = csv.writer(new_file)
 		 		csv_writer.writerows(my_Biglist)
 		# update the title bar

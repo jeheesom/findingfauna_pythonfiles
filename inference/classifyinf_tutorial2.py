@@ -3,9 +3,10 @@ import jetson.utils
 import time
 import cv2
 import numpy as np
+import PIL
 
-width=1280
-height=720
+width=488
+height=488
 dispW=width
 dispH=height
 flip=2
@@ -25,7 +26,6 @@ while True:
     _,frame=cam1.read()
     img=cv2.cvtColor(frame,cv2.COLOR_BGR2RGBA).astype(np.float32)
     img=jetson.utils.cudaFromNumpy(img)
-
     classID,confidence =net.Classify(img, width, height)
     item =net.GetClassDesc(classID)
     dt=time.time()-timeMark

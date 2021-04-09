@@ -4,8 +4,8 @@
 import jetson.inference
 import jetson.utils
 
-#cam=jetson.utils.gstCamera(640,480,'/dev/video1')
-cam=jetson.utils.gstCamera(0)
+cam=jetson.utils.gstCamera(640,480,'/dev/video1')
+#cam=jetson.utils.gstCamera(0)
 
 disp=jetson.utils.glDisplay()
 font=jetson.utils.cudaFont()
