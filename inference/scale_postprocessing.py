@@ -35,6 +35,7 @@ files_in=os.listdir(path_to_csv)
 def Diff(li1, li2):
     return (list(list(set(li1)-set(li2)) + list(set(li2)-set(li1))))
 
+
 def Crop_Image(path,Left,Top,Right,Bottom,counter):
     
     name=(path[+44:-4])

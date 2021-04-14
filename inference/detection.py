@@ -7,7 +7,8 @@ import csv
 import pandas
 
 i = 0
-image_in = "/home/james/camera_in/"
+image_in = "/home/james/inference_test/working/ordered_working/working_ordered/"
+
 image_out = "/home/james/processed_input/detected_images/"
 
 processed_image_in = []
@@ -25,12 +26,6 @@ def check_number_of_files(path):
 def get_names_of_files():
     for files in os.walk(image_in, topdown=True):
         return(files[2])
-
-def get_names_of_new_files():
-    for files in os.walk(image_in, topdown=True):
-        print(files[2])
-        to_be_processed=(Diff(processed_image_in,files[2]))
-        return(to_be_processed)
 
 def get_names_of_new_files_alt():
     for files in os.walk(image_in, topdown=True):
@@ -56,7 +51,7 @@ def detection(image_name):
     print("Detection")
     img_2_path = (f"{image_in}{image_name}")
     img_2 = jetson.utils.loadImage(img_2_path)
-    net = jetson.inference.detectNet(argv=['--model=/home/james/jetson-inference/python/training/detection/ssd/models/whale_openimages/1/ssd-mobilenet.onnx', '--labels=/home/james/jetson-inference/python/training/detection/ssd/models/whale_openimages/1/labels.txt', '--input-blob=input_0', '--output-cvg=scores', '--output-bbox=boxes', '--threshold=0.26'])
+    net = jetson.inference.detectNet(argv=['--model=/home/james/jetson-inference/python/training/detection/ssd/models/whale_openimages/1/ssd-mobilenet.onnx', '--labels=/home/james/jetson-inference/python/training/detection/ssd/models/whale_openimages/1/labels.txt', '--input-blob=input_0', '--output-cvg=scores', '--output-bbox=boxes', '--threshold=0.6'])
     detections = net.Detect(img_2, overlay="none")
     global i
     while os.path.exists(f"/home/james/processed_input/detected_images/anomaly_{i}.jpg"):
