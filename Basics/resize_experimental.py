@@ -2,8 +2,8 @@
 from PIL import Image
 import os, sys
 
-path="/home/james/whale_for_inference_test/"
-output_path="/home/james/test_output/"
+path="/home/james/findingfauna_data_whalefromabove/New IMages/"
+output_path="/home/james/findingfauna_docs/for_write_up/dataset_writeup_whalefromabove/diff_angle_resized/"
 dirs = os.listdir( path )
 
 
@@ -12,7 +12,7 @@ def resize_no_black():
         if item == '.DS_Store':
             continue
         if os.path.isfile(path+item):
-            basewidth=1280
+            basewidth=640
             img = Image.open(path+item)
             f, e = os.path.splitext(path+item)
             wpercent = (basewidth/float(img.size[0]))
